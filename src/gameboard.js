@@ -31,9 +31,17 @@ export const Gameboard = () => {
     }
   };
 
+  const allShipsSunk = () => {
+    const ships = board.flat().filter((val) => val !== null);
+    if (ships.length === 0) {
+      return false;
+    }
+    return ships.filter((ship) => !ship.isSunk()).length === 0;
+  };
+
   return {
     missedAttacks,
-    areAllShipsSunk: () => false,
+    allShipsSunk,
     placeShip,
     getShipAt,
     receiveAttack,
