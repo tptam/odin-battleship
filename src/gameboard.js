@@ -16,9 +16,12 @@ export const Gameboard = () => {
     }
   };
 
+  const getShipAt = (x, y) => board[x][y];
+
   return {
     missedAttacks: [],
     areAllShipsSunk: () => false,
     placeShip,
+    getShipAt,
   };
 };
