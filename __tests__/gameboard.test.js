@@ -12,7 +12,7 @@ beforeEach(() => {
 
 it("constructor", () => {
   expect(gb.missedAttacks).toEqual([]);
-  expect(gb.areAllShipsSunk()).toBe(false);
+  expect(gb.allShipsSunk()).toBe(false);
 });
 
 it("getShipAt", () => {
@@ -63,20 +63,20 @@ it("receiveAttack/miss", () => {
   expect(gb.missedAttacks).toEqual([{ x: 1, y: 2 }]);
 });
 
-it("areAllShipsSunk/true", () => {
+it("allShipsSunk/true", () => {
   const ship1 = { length: 3, isSunk: () => true };
   const ship2 = { length: 4, isSunk: () => true };
   Ship.mockReturnValueOnce(ship1).mockReturnValueOnce(ship2);
   gb.placeShip(0, 0, 3, "vertical");
   gb.placeShip(4, 0, 4, "horizontal");
-  expect(gb.areAllShipsSunk()).toBe(true);
+  expect(gb.allShipsSunk()).toBe(true);
 });
 
-it("areAllShipsSunk/false", () => {
+it("allShipsSunk/false", () => {
   const ship1 = { length: 3, isSunk: () => true };
   const ship2 = { length: 4, isSunk: () => false };
   Ship.mockReturnValueOnce(ship1).mockReturnValueOnce(ship2);
   gb.placeShip(0, 0, 3, "vertical");
   gb.placeShip(4, 0, 4, "horizontal");
-  expect(gb.areAllShipsSunk()).toBe(false);
+  expect(gb.allShipsSunk()).toBe(false);
 });
