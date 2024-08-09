@@ -15,14 +15,31 @@ it("constructor", () => {
   expect(gb.areAllShipsSunk()).toBe(false);
 });
 
-it("placeShip", () => {
+it("getShipAt", () => {
   const ship = {};
-  Ship.mockReturnValue = ship;
+  Ship.mockReturnValue(ship);
+  gb.placeShip(0, 0, 1, "vertical");
+  expect(gb.getShipAt(0, 0)).toEqual(ship);
+});
+
+it("placeShip/vertical", () => {
+  const ship = {};
+  Ship.mockReturnValue(ship);
   gb.placeShip(0, 0, 3, "vertical");
   expect(Ship).toHaveBeenCalledWith(3);
-  //   expect(gb.getShipAt(0, 0)).toBe(ship);
-  //   expect(gb.getShipAt(1, 0)).toBe(ship);
-  //   expect(gb.getShipAt(2, 0)).toBe(ship);
+  expect(gb.getShipAt(0, 0)).toEqual(ship);
+  expect(gb.getShipAt(0, 1)).toEqual(ship);
+  expect(gb.getShipAt(0, 2)).toEqual(ship);
+});
+
+it("placeShip/horizontal", () => {
+  const ship = {};
+  Ship.mockReturnValue(ship);
+  gb.placeShip(0, 0, 3, "horizontal");
+  expect(Ship).toHaveBeenCalledWith(3);
+  expect(gb.getShipAt(0, 0)).toEqual(ship);
+  expect(gb.getShipAt(1, 0)).toEqual(ship);
+  expect(gb.getShipAt(2, 0)).toEqual(ship);
 });
 
 it("receiveAttack/hit", () => {
