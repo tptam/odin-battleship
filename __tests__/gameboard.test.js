@@ -44,7 +44,7 @@ it("placeShip/horizontal", () => {
 
 it("receiveAttack/hit", () => {
   const ship = { length: 3, hit: jest.fn() };
-  Ship.mockReturnValue = ship;
+  Ship.mockReturnValue(ship);
   gb.placeShip(0, 0, 3, "vertical");
   gb.receiveAttack(0, 0);
   expect(ship.hit).toHaveBeenCalled();
@@ -52,8 +52,12 @@ it("receiveAttack/hit", () => {
 
 it("receiveAttack/miss", () => {
   const ship = { length: 3, hit: jest.fn() };
-  Ship.mockReturnValue = ship;
+  Ship.mockReturnValue(ship);
   gb.placeShip(0, 0, 3, "vertical");
+  expect(gb.getShipAt(0, 0)).toEqual(ship);
+  expect(gb.getShipAt(0, 1)).toEqual(ship);
+  expect(gb.getShipAt(0, 2)).toEqual(ship);
+  expect(gb.getShipAt(1, 2)).toEqual(null);
   gb.receiveAttack(1, 2);
   expect(ship.hit).not.toHaveBeenCalled();
   expect(gb.missedAttacks).toEqual([{ x: 1, y: 2 }]);
