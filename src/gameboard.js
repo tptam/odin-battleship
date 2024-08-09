@@ -1,7 +1,8 @@
 import { Ship } from "./ship.js";
 
 export const Gameboard = () => {
-  const board = Array(10).fill(Array(10).fill(null));
+  const board = [...Array(10)].map(() => Array(10).fill(null));
+  const missedAttacks = [];
 
   const placeShip = (x, y, length, direction) => {
     let cells;
@@ -12,16 +13,29 @@ export const Gameboard = () => {
     }
     if (cells.every((cell) => board[cell.x][cell.y] === null)) {
       const ship = Ship(length);
-      cells.forEach((cell) => (board[cell.x][cell.y] = ship));
+      cells.forEach((cell) => {
+        board[cell.x][cell.y] = ship;
+      });
     }
   };
 
   const getShipAt = (x, y) => board[x][y];
 
+  const receiveAttack = (x, y) => {
+    console.log(board);
+    const target = getShipAt(x, y);
+    if (target === null) {
+      missedAttacks.push({ x, y });
+    } else {
+      target.hit();
+    }
+  };
+
   return {
-    missedAttacks: [],
+    missedAttacks,
     areAllShipsSunk: () => false,
     placeShip,
     getShipAt,
+    receiveAttack,
   };
 };
