@@ -80,3 +80,17 @@ it("allShipsSunk/false", () => {
   gb.placeShip(4, 0, 4, "horizontal");
   expect(gb.allShipsSunk()).toBe(false);
 });
+
+it("isPlacable/true", () => {
+  const ship = {};
+  Ship.mockReturnValue(ship);
+  gb.placeShip(0, 0, 5, "vertical");
+  expect(gb.isPlacable(2, 2)).toBe(true);
+});
+
+it("isPlacable/false", () => {
+  const ship = {};
+  Ship.mockReturnValue(ship);
+  gb.placeShip(0, 0, 5, "vertical");
+  expect(gb.isPlacable(0, 2)).toBe(false);
+});
