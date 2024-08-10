@@ -81,16 +81,16 @@ it("allShipsSunk/false", () => {
   expect(gb.allShipsSunk()).toBe(false);
 });
 
-it("isPlacable/true", () => {
+it("isPlaceable/true", () => {
   const ship = {};
   Ship.mockReturnValue(ship);
   gb.placeShip(0, 0, 5, "vertical");
-  expect(gb.isPlacable(2, 2)).toBe(true);
+  expect(gb.isPlaceable(2, 2)).toBe(true);
 });
 
-it("isPlacable/false", () => {
+it("isPlaceable/false", () => {
   const ship = {};
   Ship.mockReturnValue(ship);
   gb.placeShip(0, 0, 5, "vertical");
-  expect(gb.isPlacable(0, 2)).toBe(false);
+  expect(gb.isPlaceable(0, 2)).toBe(false);
 });
