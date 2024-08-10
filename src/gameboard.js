@@ -19,6 +19,22 @@ export const Gameboard = () => {
     }
   };
 
+  const isPlaceable = (x, y, length, direction) => {
+    let cells;
+    if (direction === "vertical") {
+      cells = [...Array(length).keys()].map((val) => ({
+        x: x,
+        y: y + val,
+      }));
+    } else {
+      cells = [...Array(length).keys()].map((val) => ({
+        x: x + val,
+        y: y,
+      }));
+    }
+    return cells.every((cell) => board[cell.x][cell.y] === null);
+  };
+
   const getShipAt = (x, y) => board[x][y];
 
   const receiveAttack = (x, y) => {
@@ -45,5 +61,6 @@ export const Gameboard = () => {
     placeShip,
     getShipAt,
     receiveAttack,
+    isPlaceable,
   };
 };
