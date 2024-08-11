@@ -38,7 +38,6 @@ export const Gameboard = () => {
   const getShipAt = (x, y) => board[x][y];
 
   const receiveAttack = (x, y) => {
-    console.log(board);
     const target = getShipAt(x, y);
     if (target === null) {
       missedAttacks.push({ x, y });
@@ -47,8 +46,13 @@ export const Gameboard = () => {
     }
   };
 
-  const allShipsSunk = () => {
+  const getAllShips = () => {
     const ships = board.flat().filter((val) => val !== null);
+    return [...new Set(ships)];
+  };
+
+  const allShipsSunk = () => {
+    const ships = getAllShips();
     if (ships.length === 0) {
       return false;
     }
@@ -57,6 +61,7 @@ export const Gameboard = () => {
 
   return {
     missedAttacks,
+    getAllShips,
     allShipsSunk,
     placeShip,
     getShipAt,
