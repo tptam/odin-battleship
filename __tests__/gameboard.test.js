@@ -48,6 +48,7 @@ it("receiveAttack/hit", () => {
   gb.placeShip(0, 0, 3, "vertical");
   gb.receiveAttack(0, 0);
   expect(ship.hit).toHaveBeenCalled();
+  expect(gb.hits).toEqual([{ x: 0, y: 0 }]);
 });
 
 it("receiveAttack/miss", () => {
