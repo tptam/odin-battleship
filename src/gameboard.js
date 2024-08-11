@@ -23,11 +23,17 @@ export const Gameboard = () => {
   const isPlaceable = (x, y, length, direction) => {
     let cells;
     if (direction === "vertical") {
+      if (y + length >= 10) {
+        return false;
+      }
       cells = [...Array(length).keys()].map((val) => ({
         x: x,
         y: y + val,
       }));
     } else {
+      if (x + length >= 10) {
+        return false;
+      }
       cells = [...Array(length).keys()].map((val) => ({
         x: x + val,
         y: y,
