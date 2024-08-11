@@ -3,6 +3,7 @@ import { Ship } from "./ship.js";
 export const Gameboard = () => {
   const board = [...Array(10)].map(() => Array(10).fill(null));
   const missedAttacks = [];
+  const hits = [];
 
   const placeShip = (x, y, length, direction) => {
     let cells;
@@ -43,6 +44,7 @@ export const Gameboard = () => {
       missedAttacks.push({ x, y });
     } else {
       target.hit();
+      hits.push({ x, y });
     }
   };
 
@@ -61,6 +63,7 @@ export const Gameboard = () => {
 
   return {
     missedAttacks,
+    hits,
     getAllShips,
     allShipsSunk,
     placeShip,
