@@ -85,7 +85,6 @@ function placeRandomShips(player) {
 }
 
 function addShipToMap(x, y, length, direction, shipsMap) {
-  const forward = Math.random() > 0.5;
   for (let i = 0; i < length; i++) {
     const mapX = direction === "vertical" ? x : x + i;
     const mapY = direction === "vertical" ? y + i : y;
@@ -93,9 +92,9 @@ function addShipToMap(x, y, length, direction, shipsMap) {
     if (length === 1) {
       part = "all";
     } else if (i === 0) {
-      part = forward ? "fore" : "aft";
+      part = "fore";
     } else if (i === length - 1) {
-      part = forward ? "aft" : "fore";
+      part = "aft";
     } else {
       part = "middle";
     }
