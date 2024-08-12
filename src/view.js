@@ -31,16 +31,18 @@ function render(json) {
   content.appendChild(enemyWrapper);
   content.appendChild(playerWrapper);
 
-  updateBoards(json);
+  createBoards(json);
 }
 
-function updateBoards(json) {
+// function bindClickCell() {}
+
+function createBoards(json) {
   const { player, enemy } = JSON.parse(json);
 
   // Enemy board
   for (let y = 0; y < 10; y++) {
     for (let x = 0; x < 10; x++) {
-      const cell = document.createElement("div");
+      const cell = document.createElement("button");
       cell.appendChild(document.createElement("img"));
       cell.classList.add("cell");
       cell.setAttribute("data-x", x);
@@ -59,6 +61,37 @@ function updateBoards(json) {
       cell.setAttribute("data-y", y);
       player.board[x][y].forEach((string) => cell.classList.add(string));
       playerBoard.appendChild(cell);
+    }
+  }
+}
+
+function updateBoards(json) {
+  const { player, enemy } = JSON.parse(json);
+
+  // Enemy board
+  for (let y = 0; y < 10; y++) {
+    for (let x = 0; x < 10; x++) {
+      const cell = enemyBoard.querySelector(
+        `.cell:nth-child(${y * 10 + x + 1})`
+      );
+      cell.className = "cell";
+      if (
+        enemy.board[x][y].includes("hit") ||
+        enemy.board[x][y].includes("miss")
+      ) {
+        cell.disabled = true;
+      }
+      enemy.board[x][y].forEach((string) => cell.classList.add(string));
+    }
+  }
+  // Player board
+  for (let y = 0; y < 10; y++) {
+    for (let x = 0; x < 10; x++) {
+      const cell = playerBoard.querySelector(
+        `.cell:nth-child(${y * 10 + x + 1})`
+      );
+      cell.className = "cell";
+      player.board[x][y].forEach((string) => cell.classList.add(string));
     }
   }
 }
