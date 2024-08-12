@@ -3,6 +3,10 @@ import PubSub from "PubSub";
 
 export const Gameboard = () => {
   const board = [...Array(10)].map(() => Array(10).fill(null));
+  const noAttacks = Array.from({ length: 100 }, (_, i) => ({
+    x: i % 10,
+    y: Math.floor(i / 10),
+  }));
   const missedAttacks = [];
   const hits = [];
   const pubsub = new PubSub();
@@ -54,6 +58,10 @@ export const Gameboard = () => {
       target.hit();
       hits.push({ x, y });
     }
+    const index = noAttacks.findIndex(
+      (coord) => coord.x === x && coord.y === y
+    );
+    noAttacks.splice(index, 1);
     pubsub.publish("receive_attack");
   };
 
@@ -72,6 +80,7 @@ export const Gameboard = () => {
 
   return {
     pubsub,
+    noAttacks,
     missedAttacks,
     hits,
     getAllShips,
