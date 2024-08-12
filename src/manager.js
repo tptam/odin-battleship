@@ -4,17 +4,29 @@ import { Player } from "../src/player.js";
 
 import * as View from "./view.js";
 
-let player1;
-let player2;
+let currentPlayer;
+let currentEnemy;
 
 function startGame() {
-  player1 = Player("real");
-  player2 = Player("computer");
-  player1.shipsMap = [...Array(10)].map(() => Array(10).fill(null));
-  player2.shipsMap = [...Array(10)].map(() => Array(10).fill(null));
-  placeRandomShips(player1);
-  placeRandomShips(player2);
-  View.render(getJson(player1, player2, "Your turn"));
+  currentPlayer = Player("real");
+  currentEnemy = Player("computer");
+
+  currentPlayer.shipsMap = [...Array(10)].map(() => Array(10).fill(null));
+  currentEnemy.shipsMap = [...Array(10)].map(() => Array(10).fill(null));
+  placeRandomShips(currentPlayer);
+  placeRandomShips(currentEnemy);
+  currentPlayer.gameBoard.pubsub.subscribe("receive_attack", () => {
+    console.log("received attack - player");
+  });
+  currentEnemy.gameBoard.pubsub.subscribe("receive_attack", () => {
+    console.log("received attack - enemy");
+  });
+  View.render(getJson(currentPlayer, currentEnemy, "Your turn"));
+  View.bindClickCell(currentEnemy.gameBoard.receiveAttack);
+}
+
+function switchTurns() {
+  [currentPlayer, currentEnemy] = [currentEnemy, currentPlayer];
 }
 
 function getJson(player, enemy, message) {
