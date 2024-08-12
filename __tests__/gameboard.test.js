@@ -122,3 +122,14 @@ it("isPlaceable/false", () => {
   gb.placeShip(0, 0, 5, "vertical");
   expect(gb.isPlaceable(0, 2)).toBe(false);
 });
+
+it("noAttacks", () => {
+  for (let x = 0; x < 10; x++) {
+    for (let y = 0; y < 10; y++) {
+      if (x !== 9 || y !== 9) {
+        gb.receiveAttack(x, y);
+      }
+    }
+  }
+  expect(gb.noAttacks).toEqual([{ x: 9, y: 9 }]);
+});
