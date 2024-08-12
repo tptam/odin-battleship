@@ -44,7 +44,7 @@ function updateBoards(json) {
       cell.classList.add("cell");
       cell.setAttribute("data-x", x);
       cell.setAttribute("data-y", y);
-      cell.className = enemy.board[x][y].join(" ");
+      enemy.board[x][y].forEach((string) => cell.classList.add(string));
       enemyBoard.appendChild(cell);
     }
   }
@@ -55,7 +55,7 @@ function updateBoards(json) {
       cell.classList.add("cell");
       cell.setAttribute("data-x", x);
       cell.setAttribute("data-y", y);
-      cell.className = player.board[x][y].join(" ");
+      player.board[x][y].forEach((string) => cell.classList.add(string));
       playerBoard.appendChild(cell);
     }
   }
