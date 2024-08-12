@@ -72,7 +72,7 @@ h1, h2, h3 {
 }
 
 .cell.ship.horizontal.fore:after{
-left: 0;
+  left: 0;
   border-radius: 100% 0% 0% 100% / 50% 50% 50% 50%; 
 }
 
@@ -111,4 +111,23 @@ left: 0;
     top: 0;
     bottom: 0;
   border-radius: 50% 50% 50% 50% / 20% 20% 20% 20%;
+}
+
+.cell.hit img {
+    position: absolute;
+    content: url("./images/explode.svg");
+    z-index: calc(infinity);
+    top: 20%;
+    bottom: 20%;
+    left: 20%;
+    right: 20%;
+}
+
+.cell.miss img {
+    position: absolute;
+    content: url("./images/miss.svg");
+    top: 35%;
+    bottom: 35%;
+    left: 35%;
+    right: 35%;
 }

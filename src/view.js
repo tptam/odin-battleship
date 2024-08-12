@@ -41,6 +41,7 @@ function updateBoards(json) {
   for (let y = 0; y < 10; y++) {
     for (let x = 0; x < 10; x++) {
       const cell = document.createElement("div");
+      cell.appendChild(document.createElement("img"));
       cell.classList.add("cell");
       cell.setAttribute("data-x", x);
       cell.setAttribute("data-y", y);
@@ -52,6 +53,7 @@ function updateBoards(json) {
   for (let y = 0; y < 10; y++) {
     for (let x = 0; x < 10; x++) {
       const cell = document.createElement("div");
+      cell.appendChild(document.createElement("img"));
       cell.classList.add("cell");
       cell.setAttribute("data-x", x);
       cell.setAttribute("data-y", y);
