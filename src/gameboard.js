@@ -1,9 +1,11 @@
 import { Ship } from "./ship.js";
+import PubSub from "PubSub";
 
 export const Gameboard = () => {
   const board = [...Array(10)].map(() => Array(10).fill(null));
   const missedAttacks = [];
   const hits = [];
+  const pubsub = new PubSub();
 
   const placeShip = (x, y, length, direction) => {
     let cells;
@@ -52,6 +54,7 @@ export const Gameboard = () => {
       target.hit();
       hits.push({ x, y });
     }
+    pubsub.publish("receive_attack");
   };
 
   const getAllShips = () => {
@@ -68,6 +71,7 @@ export const Gameboard = () => {
   };
 
   return {
+    pubsub,
     missedAttacks,
     hits,
     getAllShips,
