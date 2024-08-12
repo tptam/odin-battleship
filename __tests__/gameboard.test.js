@@ -1,18 +1,28 @@
 import { Gameboard } from "../src/gameboard.js";
 import { Ship } from "../src/ship.js";
+import PubSub from "PubSub";
 
 jest.mock("../src/ship.js");
+jest.mock("PubSub");
 
 let gb;
 
 beforeEach(() => {
   gb = Gameboard();
   Ship.mockClear();
+  PubSub.mockClear();
+  PubSub.mockImplementation(() => {
+    return {
+      publish: jest.fn(),
+    };
+  });
 });
 
 it("constructor", () => {
+  gb = Gameboard();
   expect(gb.missedAttacks).toEqual([]);
   expect(gb.allShipsSunk()).toBe(false);
+  expect(PubSub).toHaveBeenCalled();
 });
 
 it("getShipAt", () => {
@@ -40,6 +50,14 @@ it("placeShip/horizontal", () => {
   expect(gb.getShipAt(0, 0)).toEqual(ship);
   expect(gb.getShipAt(1, 0)).toEqual(ship);
   expect(gb.getShipAt(2, 0)).toEqual(ship);
+});
+
+it("receiveAttack/pubsub", () => {
+  const ship = { length: 3, hit: () => {} };
+  Ship.mockReturnValue(ship);
+  gb.placeShip(0, 0, 3, "vertical");
+  gb.receiveAttack(0, 0);
+  expect(gb.pubsub.publish).toHaveBeenCalledWith("receive_attack");
 });
 
 it("receiveAttack/hit", () => {
