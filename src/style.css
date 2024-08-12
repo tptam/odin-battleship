@@ -47,3 +47,68 @@ ul {
 h1, h2, h3 {
     color: var(--text-color-header);
 }
+
+.board {
+    width: 450px;
+    aspect-ratio: 1;
+    display: grid;
+    grid-template: repeat(10, 1fr) / repeat(10, 1fr);
+}
+
+.cell {
+    background-color: skyblue;
+    position: relative;
+    border: 1px solid white;
+}
+
+.cell.ship.horizontal:after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: 10%;
+  bottom: 10%;
+  background-color: gray;
+}
+
+.cell.ship.horizontal.fore:after{
+left: 0;
+  border-radius: 100% 0% 0% 100% / 50% 50% 50% 50%; 
+}
+
+.cell.ship.horizontal.aft:after {
+    right: 0;
+    border-radius: 0% 100% 100% 0% / 50% 50% 50% 50%; 
+}
+
+.cell.ship.horizontal.all:after {
+    left: 0;
+    right: 0;
+    border-radius: 20% 20% 20% 20%/ 50% 50% 50% 50%;
+}
+
+.cell.ship.vertical:after{
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: -2px;
+  bottom: -2px;
+  background-color: gray;
+}
+
+.cell.ship.vertical.fore:after{
+    top: 0;
+  border-radius: 50% 50% 100% 0% / 100% 100% 0% 0%; 
+}
+
+.cell.ship.vertical.aft:after{
+    bottom: 0;
+    border-radius: 100% 0% 50% 50% / 0% 0% 100% 100%; 
+}
+
+.cell.ship.vertical.all:after{
+    top: 0;
+    bottom: 0;
+  border-radius: 50% 50% 50% 50% / 20% 20% 20% 20%;
+}
