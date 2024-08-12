@@ -61,14 +61,17 @@ h1, h2, h3 {
     border: 1px solid white;
 }
 
-.cell.ship.horizontal:after {
+.cell.ship::after {
   content: "";
   position: absolute;
+  background-color: gray;
+}
+
+.cell.ship.horizontal:after {
   left: -2px;
   right: -2px;
   top: 10%;
   bottom: 10%;
-  background-color: gray;
 }
 
 .cell.ship.horizontal.fore:after{
@@ -88,13 +91,10 @@ h1, h2, h3 {
 }
 
 .cell.ship.vertical:after{
-  content: "";
-  position: absolute;
   left: 10%;
   right: 10%;
   top: -2px;
   bottom: -2px;
-  background-color: gray;
 }
 
 .cell.ship.vertical.fore:after{
