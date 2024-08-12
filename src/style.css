@@ -67,6 +67,10 @@ h1, h2, h3 {
   background-color: gray;
 }
 
+.cell.ship.sunk::after {
+    background-color: black;
+}
+
 .cell.ship.horizontal:after {
   left: -2px;
   right: -2px;
