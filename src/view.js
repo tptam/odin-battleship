@@ -34,7 +34,13 @@ function render(json) {
   createBoards(json);
 }
 
-// function bindClickCell() {}
+function bindClickCell(handler) {
+  enemyBoard.addEventListener("click", (e) => {
+    const x = e.target.getAttribute("data-x");
+    const y = e.target.getAttribute("data-y");
+    handler(x, y);
+  });
+}
 
 function createBoards(json) {
   const { player, enemy } = JSON.parse(json);
@@ -96,4 +102,8 @@ function updateBoards(json) {
   }
 }
 
-export { render, updateBoards };
+function setMessage(string) {
+  message.textContent = string;
+}
+
+export { render, bindClickCell, updateBoards, setMessage };
