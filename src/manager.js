@@ -19,29 +19,88 @@ function startGame() {
     console.log("received attack - player");
   });
   currentEnemy.gameBoard.pubsub.subscribe("receive_attack", () => {
-    console.log("received attack - enemy");
+    onReceiveAttack();
   });
-  View.render(getJson(currentPlayer, currentEnemy, "Your turn"));
+  const playerData = getPlayerData(currentPlayer, true);
+  const enemyData = getEnemyData(currentEnemy, true, true);
+  View.render(
+    JSON.stringify({
+      player: playerData,
+      enemy: enemyData,
+      message: "Your turn",
+    })
+  );
   View.bindClickCell(currentEnemy.gameBoard.receiveAttack);
+}
+
+function onReceiveAttack() {
+  const enemyData = getEnemyData(currentEnemy, true, false);
+  View.updateEnemyBoard(JSON.stringify({ enemy: enemyData }));
+  View.setMessage("");
+  if (currentEnemy.gameBoard.allShipsSunk()) {
+    console.log(currentPlayer.type + " win.");
+    return;
+  }
+  View.showEndTurnButton();
+  View.bindEndTurn(() => {
+    console.log("end turn");
+  });
+}
+
+async function playComputer() {
+  View.setMessage("Computer's turn");
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  playRandom();
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  View.setMessage("Your turn");
+}
+
+function playRandom() {
+  const noAttacks = currentEnemy.gameBoard.noAttacks;
+  const coord = noAttacks.at(Math.floor(Math.random() * noAttacks.length));
+  console.log(coord);
+  currentEnemy.gameBoard.receiveAttack(coord.x, coord.y);
 }
 
 function switchTurns() {
   [currentPlayer, currentEnemy] = [currentEnemy, currentPlayer];
 }
 
-function getJson(player, enemy, message) {
-  const playerData = {
+function getPlayerData(player, unsunkShipsVisible) {
+  return {
     board: getBoardData(player),
+    unsunkShipsVisible,
   };
-  const enemyData = {
-    board: getBoardData(enemy),
-  };
-  return JSON.stringify({
-    player: playerData,
-    enemy: enemyData,
-    message,
-  });
 }
+
+function getEnemyData(enemy, unsunkShipsVisible, clickable) {
+  return {
+    board: getBoardData(enemy),
+    unsunkShipsVisible,
+    clickable,
+  };
+}
+
+// function getJson(
+//   player,
+//   enemy,
+//   playerUnsunkShipsVisible,
+//   enemyUnsunkShipsVisible,
+//   message
+// ) {
+//   const playerData = {
+//     board: getBoardData(player),
+//     unsunkShipsVisible: playerUnsunkShipsVisible,
+//   };
+//   const enemyData = {
+//     board: getBoardData(enemy),
+//   };
+//   return JSON.stringify({
+//     player: playerData,
+//     enemy: enemyData,
+//     message,
+//   });
+// }
 
 function getBoardData(player) {
   const board = player.gameBoard;
