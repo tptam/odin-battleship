@@ -17,6 +17,7 @@ function startGame() {
   placeRandomShips(currentEnemy);
   currentPlayer.gameBoard.pubsub.subscribe("receive_attack", () => {
     console.log("received attack - player");
+    onReceiveAttack();
   });
   currentEnemy.gameBoard.pubsub.subscribe("receive_attack", () => {
     onReceiveAttack();
@@ -42,17 +43,29 @@ function onReceiveAttack() {
     return;
   }
   View.showEndTurnButton();
-  View.bindEndTurn(() => {
-    console.log("end turn");
-  });
+  View.bindEndTurn(onEndTurn);
+}
+
+function onEndTurn() {
+  switchTurns();
+  const enemyData = getEnemyData(currentEnemy, true, !isComputerTurn());
+  const playerData = getPlayerData(currentPlayer, !isComputerTurn());
+  View.updateEnemyBoard(JSON.stringify({ enemy: enemyData }));
+  View.updatePlayerBoard(JSON.stringify({ player: playerData }));
+  View.hideEndTurnButton();
+  View.setMessage(isComputerTurn() ? "Computer's turn" : "Your turn");
+  if (isComputerTurn()) {
+    playComputer();
+  }
+}
+
+function isComputerTurn() {
+  return currentPlayer.type === "computer";
 }
 
 async function playComputer() {
-  View.setMessage("Computer's turn");
   await new Promise((resolve) => setTimeout(resolve, 500));
   playRandom();
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  View.setMessage("Your turn");
 }
 
 function playRandom() {
