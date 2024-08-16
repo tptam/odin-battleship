@@ -2,6 +2,7 @@ let content;
 let message;
 let enemyBoard;
 let playerBoard;
+let endTurnButton;
 
 function render(json) {
   content = document.querySelector("#content");
@@ -43,8 +44,6 @@ function bindClickCell(handler) {
 }
 
 function createBoards(json) {
-  const { player, enemy } = JSON.parse(json);
-
   // Enemy board
   for (let y = 0; y < 10; y++) {
     for (let x = 0; x < 10; x++) {
@@ -53,7 +52,6 @@ function createBoards(json) {
       cell.classList.add("cell");
       cell.setAttribute("data-x", x);
       cell.setAttribute("data-y", y);
-      enemy.board[x][y].forEach((string) => cell.classList.add(string));
       enemyBoard.appendChild(cell);
     }
   }
@@ -65,16 +63,15 @@ function createBoards(json) {
       cell.classList.add("cell");
       cell.setAttribute("data-x", x);
       cell.setAttribute("data-y", y);
-      player.board[x][y].forEach((string) => cell.classList.add(string));
       playerBoard.appendChild(cell);
     }
   }
+  updatePlayerBoard(json);
+  updateEnemyBoard(json);
 }
 
-function updateBoards(json) {
-  const { player, enemy } = JSON.parse(json);
-
-  // Enemy board
+function updateEnemyBoard(json) {
+  const { enemy } = JSON.parse(json);
   for (let y = 0; y < 10; y++) {
     for (let x = 0; x < 10; x++) {
       const cell = enemyBoard.querySelector(
@@ -82,22 +79,46 @@ function updateBoards(json) {
       );
       cell.className = "cell";
       if (
+        !enemy.clickable ||
         enemy.board[x][y].includes("hit") ||
         enemy.board[x][y].includes("miss")
       ) {
         cell.disabled = true;
       }
-      enemy.board[x][y].forEach((string) => cell.classList.add(string));
+      if (
+        !enemy.unsunkShipsVisible &&
+        enemy.board[x][y].includes("ship") &&
+        !enemy.board[x][y].includes("hit")
+      ) {
+        enemy.board[x][y]
+          .filter((string) => string !== "ship")
+          .forEach((string) => cell.classList.add(string));
+      } else {
+        enemy.board[x][y].forEach((string) => cell.classList.add(string));
+      }
     }
   }
-  // Player board
+}
+
+function updatePlayerBoard(json) {
+  const { player } = JSON.parse(json);
   for (let y = 0; y < 10; y++) {
     for (let x = 0; x < 10; x++) {
       const cell = playerBoard.querySelector(
         `.cell:nth-child(${y * 10 + x + 1})`
       );
       cell.className = "cell";
-      player.board[x][y].forEach((string) => cell.classList.add(string));
+      if (
+        !player.unsunkShipsVisible &&
+        player.board[x][y].includes("ship") &&
+        !player.board[x][y].includes("hit")
+      ) {
+        player.board[x][y]
+          .filter((string) => string !== "ship")
+          .forEach((string) => cell.classList.add(string));
+      } else {
+        player.board[x][y].forEach((string) => cell.classList.add(string));
+      }
     }
   }
 }
@@ -106,4 +127,23 @@ function setMessage(string) {
   message.textContent = string;
 }
 
-export { render, bindClickCell, updateBoards, setMessage };
+function showEndTurnButton() {
+  endTurnButton = document.createElement("button");
+  endTurnButton.classList.add("end-turn");
+  endTurnButton.textContent = "End Turn";
+  message.appendChild(endTurnButton);
+}
+
+function bindEndTurn(handler) {
+  endTurnButton.addEventListener("click", handler);
+}
+
+export {
+  render,
+  bindClickCell,
+  updateEnemyBoard,
+  updatePlayerBoard,
+  setMessage,
+  showEndTurnButton,
+  bindEndTurn,
+};
