@@ -78,13 +78,10 @@ function updateEnemyBoard(json) {
         `.cell:nth-child(${y * 10 + x + 1})`
       );
       cell.className = "cell";
-      if (
+      cell.disabled =
         !enemy.clickable ||
         enemy.board[x][y].includes("hit") ||
-        enemy.board[x][y].includes("miss")
-      ) {
-        cell.disabled = true;
-      }
+        enemy.board[x][y].includes("miss");
       if (
         !enemy.unsunkShipsVisible &&
         enemy.board[x][y].includes("ship") &&
@@ -134,6 +131,10 @@ function showEndTurnButton() {
   message.appendChild(endTurnButton);
 }
 
+function hideEndTurnButton() {
+  endTurnButton.remove();
+}
+
 function bindEndTurn(handler) {
   endTurnButton.addEventListener("click", handler);
 }
@@ -145,5 +146,6 @@ export {
   updatePlayerBoard,
   setMessage,
   showEndTurnButton,
+  hideEndTurnButton,
   bindEndTurn,
 };
