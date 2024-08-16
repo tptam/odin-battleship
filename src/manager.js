@@ -22,7 +22,7 @@ function startGame() {
     onReceiveAttack();
   });
   const playerData = getPlayerData(currentPlayer, true);
-  const enemyData = getEnemyData(currentEnemy, true, true);
+  const enemyData = getEnemyData(currentEnemy, true, true); //visible for testing
   View.render(
     JSON.stringify({
       player: playerData,
@@ -34,7 +34,7 @@ function startGame() {
 }
 
 function onReceiveAttack() {
-  const enemyData = getEnemyData(currentEnemy, true, false);
+  const enemyData = getEnemyData(currentEnemy, false, false);
   View.updateEnemyBoard(JSON.stringify({ enemy: enemyData }));
   View.setMessage("");
   if (currentEnemy.gameBoard.allShipsSunk()) {
@@ -115,7 +115,7 @@ function getBoardData(player) {
   }
 
   board.missedAttacks.forEach(({ x, y }) => {
-    boardData[x][y].push("missed");
+    boardData[x][y].push("miss");
   });
   board.hits.forEach(({ x, y }) => {
     boardData[x][y].push("hit");
