@@ -88,7 +88,7 @@ function updateEnemyBoard(json) {
       if (
         !enemy.unsunkShipsVisible &&
         enemy.board[x][y].includes("ship") &&
-        !enemy.board[x][y].includes("hit")
+        !enemy.board[x][y].includes("sunk")
       ) {
         enemy.board[x][y]
           .filter((string) => string !== "ship")
