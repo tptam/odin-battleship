@@ -207,8 +207,11 @@ function showEndResult(name, type) {
   message.textContent = type === "computer" ? "Computer Wins" : "You Win";
   playAgainButton.classList.add("play-again");
   playAgainButton.textContent = "Play Again";
-  quitButton.addEventListener("click", () => modal.close());
   quitButton.textContent = "Quit";
+
+  playAgainButton.addEventListener("click", () => modal.close());
+  quitButton.addEventListener("click", () => modal.close());
+
   modal.appendChild(img);
   modal.appendChild(message);
   modal.appendChild(quitButton);
