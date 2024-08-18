@@ -45,10 +45,15 @@ function onReceiveAttack(coord) {
     View.setMessage("");
     View.showPlayAgainButton();
     View.showEndResult("", currentPlayer.type);
+    View.bindPlayAgain(onPlayAgain);
     return;
   }
   View.showEndTurnButton();
   View.bindEndTurn(onEndTurn);
+}
+
+function onPlayAgain() {
+  startGame();
 }
 
 function onEndTurn() {
