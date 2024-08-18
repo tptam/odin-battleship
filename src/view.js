@@ -43,6 +43,9 @@ function render(json) {
 
 function bindClickCell(handler) {
   enemyBoard.addEventListener("click", (e) => {
+    if (!e.target.classList.contains("cell")) {
+      return;
+    }
     const x = e.target.getAttribute("data-x");
     const y = e.target.getAttribute("data-y");
     handler(x, y);
