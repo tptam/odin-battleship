@@ -71,6 +71,7 @@ h1, h2, h3 {
     aspect-ratio: 1;
     display: grid;
     grid-template: repeat(10, 1fr) / repeat(10, 1fr);
+    position: relative;
 }
 
 .cell {
@@ -79,7 +80,9 @@ h1, h2, h3 {
     border: 1px solid white;
 }
 
-.cell:enabled:hover {
+.cell:enabled:hover,
+.cell.focus
+{
     filter: brightness(1.2);
 }
 
@@ -156,4 +159,34 @@ h1, h2, h3 {
     bottom: 35%;
     left: 35%;
     right: 35%;
+}
+
+.thinking {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    width: 90%;
+    height: 90%;
+    --diff-x: -23px;
+    --diff-y: -23px;
+}
+
+
+@keyframes shrink {
+    from {
+        transform: scale(1);
+        transform: translate(0, 0);
+    }
+    to {
+        transform: translate(var(--diff-x), var(--diff-y)) scale(0);
+    }
+}
+
+.thinking.bye {
+  animation-name: shrink;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
 }
