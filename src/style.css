@@ -190,3 +190,36 @@ h1, h2, h3 {
   animation-duration: 1s;
   animation-fill-mode: forwards;
 }
+
+dialog.modal[open] {
+    inset: 0;
+    margin: auto;
+    width: min(600px, 90vw);
+    padding: calc(var(--gutter) * 3);
+    border: 1px solid gray;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--gutter);
+    justify-items: center;
+}
+
+dialog.modal::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+dialog.modal img {
+    grid-column: 1/-1;
+    display: block;
+    width: 38%;
+}
+
+dialog.modal h1 {
+    grid-column: 1/-1;
+}
+
+dialog.modal button {
+    display: block;
+    width: 80%;
+    font-size: 1.2rem;
+    padding: var(--gutter);
+}
