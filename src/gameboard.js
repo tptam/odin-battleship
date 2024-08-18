@@ -62,7 +62,7 @@ export const Gameboard = () => {
       (coord) => coord.x === x && coord.y === y
     );
     noAttacks.splice(index, 1);
-    pubsub.publish("receive_attack");
+    pubsub.publish("receive_attack", { x, y });
   };
 
   const getAllShips = () => {
