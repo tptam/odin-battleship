@@ -1,10 +1,14 @@
 import Load from "./images/loading.svg";
+import Win from "./images/ship.svg";
+import Lose from "./images/drown.svg";
 
 let content;
 let message;
 let enemyBoard;
 let playerBoard;
 let endTurnButton;
+let modal;
+let playAgainButton;
 
 function render(json) {
   content = document.querySelector("#content");
@@ -177,16 +181,57 @@ function getDiff(coord) {
   };
 }
 
+function showPlayAgainButton() {
+  const playAgainButton = document.createElement("button");
+  playAgainButton.classList.add("play-again");
+  playAgainButton.textContent = "Play Again";
+  message.appendChild(playAgainButton);
+}
+
+function hidePlayAgainButton() {
+  const playAgainButton = document.querySelector("message .play-again");
+  playAgainButton.remove();
+}
+
+function showEndResult(name, type) {
+  const modal = document.querySelector("dialog");
+  modal.textContent = "";
+  const img = new Image();
+  const message = document.createElement("h1");
+  const quitButton = document.createElement("button");
+  const playAgainButton = document.createElement("button");
+  img.src = type === "computer" ? Lose : Win;
+  message.textContent = type === "computer" ? "Computer Wins" : "You Win";
+  playAgainButton.classList.add("play-again");
+  playAgainButton.textContent = "Play Again";
+  quitButton.addEventListener("click", () => modal.close());
+  quitButton.textContent = "Quit";
+  modal.appendChild(img);
+  modal.appendChild(message);
+  modal.appendChild(quitButton);
+  modal.appendChild(playAgainButton);
+  modal.showModal();
+}
+
+function bindPlayAgain(handler) {
+  const buttons = document.querySelectorAll("button.play-again");
+  buttons.forEach((button) => button.addEventListener("click", handler));
+}
+
 export {
   render,
   bindClickCell,
   bindEndTurn,
+  bindPlayAgain,
   updateEnemyBoard,
   updatePlayerBoard,
+  showEndResult,
   setMessage,
   highlightCell,
   showEndTurnButton,
   hideEndTurnButton,
   showThinkingIcon,
   hideThinkingIcon,
+  showPlayAgainButton,
+  hidePlayAgainButton,
 };
