@@ -40,7 +40,11 @@ function onReceiveAttack(coord) {
   View.highlightCell(coord);
   View.setMessage("");
   if (currentEnemy.gameBoard.allShipsSunk()) {
-    console.log(currentPlayer.type + " win.");
+    enemyData.clickable = false;
+    View.updateEnemyBoard(JSON.stringify({ enemy: enemyData }));
+    View.setMessage("");
+    View.showPlayAgainButton();
+    View.showEndResult("", currentPlayer.type);
     return;
   }
   View.showEndTurnButton();
@@ -66,10 +70,10 @@ function isComputerTurn() {
 
 async function playComputer() {
   View.showThinkingIcon();
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 500));
   const coord = getRandomAttackCoord();
   await View.hideThinkingIcon(coord);
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 100));
   currentEnemy.gameBoard.receiveAttack(coord.x, coord.y);
 }
 
