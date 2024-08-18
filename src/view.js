@@ -1,3 +1,5 @@
+import Load from "./images/loading.svg";
+
 let content;
 let message;
 let enemyBoard;
@@ -108,7 +110,7 @@ function updatePlayerBoard(json) {
       if (
         !player.unsunkShipsVisible &&
         player.board[x][y].includes("ship") &&
-        !player.board[x][y].includes("hit")
+        !player.board[x][y].includes("sunk")
       ) {
         player.board[x][y]
           .filter((string) => string !== "ship")
@@ -124,11 +126,38 @@ function setMessage(string) {
   message.textContent = string;
 }
 
+function highlightCell(coord) {
+  const cell = document.querySelector(
+    `.cell[data-x="${coord.x}"][data-y="${coord.y}"]`
+  );
+  cell.classList.add("focus");
+}
+
 function showEndTurnButton() {
   endTurnButton = document.createElement("button");
   endTurnButton.classList.add("end-turn");
   endTurnButton.textContent = "End Turn";
   message.appendChild(endTurnButton);
+}
+
+function showThinkingIcon() {
+  const icon = new Image();
+  icon.src = Load;
+  icon.className = "thinking";
+  enemyBoard.appendChild(icon);
+}
+
+async function hideThinkingIcon(coord = null) {
+  const diff = coord === null ? { x: 0, y: 0 } : getDiff(coord);
+  const icon = document.querySelector(".thinking");
+  if (coord !== null) {
+    highlightCell(coord);
+  }
+  icon.style.setProperty("--diff-x", diff.x + "px");
+  icon.style.setProperty("--diff-y", diff.y + "px");
+  icon.classList.add("bye");
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  icon.remove();
 }
 
 function hideEndTurnButton() {
@@ -139,13 +168,25 @@ function bindEndTurn(handler) {
   endTurnButton.addEventListener("click", handler);
 }
 
+function getDiff(coord) {
+  const cellSize = document.querySelector(".cell").offsetWidth;
+  const borderWidth = 2;
+  return {
+    x: (coord.x - 4.5) * (cellSize + borderWidth),
+    y: (coord.y - 4.5) * (cellSize + borderWidth),
+  };
+}
+
 export {
   render,
   bindClickCell,
+  bindEndTurn,
   updateEnemyBoard,
   updatePlayerBoard,
   setMessage,
+  highlightCell,
   showEndTurnButton,
   hideEndTurnButton,
-  bindEndTurn,
+  showThinkingIcon,
+  hideThinkingIcon,
 };
