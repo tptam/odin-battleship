@@ -15,12 +15,12 @@ function startGame() {
   currentEnemy.shipsMap = [...Array(10)].map(() => Array(10).fill(null));
   placeRandomShips(currentPlayer);
   placeRandomShips(currentEnemy);
-  currentPlayer.gameBoard.pubsub.subscribe("receive_attack", () => {
+  currentPlayer.gameBoard.pubsub.subscribe("receive_attack", (data) => {
     console.log("received attack - player");
-    onReceiveAttack();
+    onReceiveAttack(data);
   });
-  currentEnemy.gameBoard.pubsub.subscribe("receive_attack", () => {
-    onReceiveAttack();
+  currentEnemy.gameBoard.pubsub.subscribe("receive_attack", (data) => {
+    onReceiveAttack(data);
   });
   const playerData = getPlayerData(currentPlayer, true);
   const enemyData = getEnemyData(currentEnemy, true, true); //visible for testing
@@ -34,9 +34,10 @@ function startGame() {
   View.bindClickCell(currentEnemy.gameBoard.receiveAttack);
 }
 
-function onReceiveAttack() {
-  const enemyData = getEnemyData(currentEnemy, false, false);
+function onReceiveAttack(coord) {
+  const enemyData = getEnemyData(currentEnemy, isComputerTurn(), false);
   View.updateEnemyBoard(JSON.stringify({ enemy: enemyData }));
+  View.highlightCell(coord);
   View.setMessage("");
   if (currentEnemy.gameBoard.allShipsSunk()) {
     console.log(currentPlayer.type + " win.");
@@ -64,15 +65,18 @@ function isComputerTurn() {
 }
 
 async function playComputer() {
+  View.showThinkingIcon();
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const coord = getRandomAttackCoord();
+  await View.hideThinkingIcon(coord);
   await new Promise((resolve) => setTimeout(resolve, 500));
-  playRandom();
+  currentEnemy.gameBoard.receiveAttack(coord.x, coord.y);
 }
 
-function playRandom() {
+function getRandomAttackCoord() {
   const noAttacks = currentEnemy.gameBoard.noAttacks;
   const coord = noAttacks.at(Math.floor(Math.random() * noAttacks.length));
-  console.log(coord);
-  currentEnemy.gameBoard.receiveAttack(coord.x, coord.y);
+  return coord;
 }
 
 function switchTurns() {
