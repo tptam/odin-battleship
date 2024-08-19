@@ -28,7 +28,8 @@ function startGame() {
     JSON.stringify({
       player: playerData,
       enemy: enemyData,
-      message: "Your turn",
+      playerName: "You",
+      message: "",
     })
   );
   View.bindClickCell(currentEnemy.gameBoard.receiveAttack);
@@ -38,11 +39,16 @@ function onReceiveAttack(coord) {
   const enemyData = getEnemyData(currentEnemy, isComputerTurn(), false);
   View.updateEnemyBoard(JSON.stringify({ enemy: enemyData }));
   View.highlightCell(coord);
-  View.setMessage("");
+  let result = "miss";
+  if (enemyData.board[coord.x][coord.y].includes("sunk")) {
+    result = "sunk a ship";
+  } else if (enemyData.board[coord.x][coord.y].includes("hit")) {
+    result = "hit";
+  }
+  View.setMessage(`Attacked (${coord.x},${coord.y}): ${result}`);
   if (currentEnemy.gameBoard.allShipsSunk()) {
     enemyData.clickable = false;
     View.updateEnemyBoard(JSON.stringify({ enemy: enemyData }));
-    View.setMessage("");
     View.showPlayAgainButton();
     View.showEndResult("", currentPlayer.type);
     View.bindPlayAgain(onPlayAgain);
@@ -63,7 +69,8 @@ function onEndTurn() {
   View.updateEnemyBoard(JSON.stringify({ enemy: enemyData }));
   View.updatePlayerBoard(JSON.stringify({ player: playerData }));
   View.hideEndTurnButton();
-  View.setMessage(isComputerTurn() ? "Computer's turn" : "Your turn");
+  View.updatePlayerName(isComputerTurn() ? "Computer" : "You");
+  View.setMessage("");
   if (isComputerTurn()) {
     playComputer();
   }
@@ -106,27 +113,6 @@ function getEnemyData(enemy, unsunkShipsVisible, clickable) {
     clickable,
   };
 }
-
-// function getJson(
-//   player,
-//   enemy,
-//   playerUnsunkShipsVisible,
-//   enemyUnsunkShipsVisible,
-//   message
-// ) {
-//   const playerData = {
-//     board: getBoardData(player),
-//     unsunkShipsVisible: playerUnsunkShipsVisible,
-//   };
-//   const enemyData = {
-//     board: getBoardData(enemy),
-//   };
-//   return JSON.stringify({
-//     player: playerData,
-//     enemy: enemyData,
-//     message,
-//   });
-// }
 
 function getBoardData(player) {
   const board = player.gameBoard;
