@@ -4,39 +4,44 @@ import Lose from "./images/drown.svg";
 
 let content;
 let message;
+let turn;
 let enemyBoard;
+let playerBoardTitle;
 let playerBoard;
 let endTurnButton;
-let modal;
-let playAgainButton;
 
 function render(json) {
   content = document.querySelector("#content");
   content.textContent = "";
+  const playArea = document.createElement("div");
+  playArea.className = "play-area";
+  content.appendChild(playArea);
+  turn = document.createElement("h2");
+  turn.className = "turn";
+  turn.textContent = `${getPossessive(JSON.parse(json).playerName)} Turn`;
   message = document.createElement("div");
   message.className = "message";
   message.textContent = JSON.parse(json).message;
   const enemyWrapper = document.createElement("div");
   enemyWrapper.className = "enemy-wrapper";
-  const enemyTitle = document.createElement("h2");
-  enemyTitle.textContent = "Enemy Zone";
-  enemyWrapper.appendChild(enemyTitle);
   enemyBoard = document.createElement("div");
   enemyBoard.className = "board";
+  enemyWrapper.appendChild(turn);
+  enemyWrapper.appendChild(message);
   enemyWrapper.appendChild(enemyBoard);
-
   const playerWrapper = document.createElement("div");
   playerWrapper.className = "player-wrapper";
-  const playerTitle = document.createElement("h2");
-  playerTitle.textContent = "Your Zone";
-  playerWrapper.appendChild(playerTitle);
+  playerBoardTitle = document.createElement("h2");
+  playerBoardTitle.textContent = `${getPossessive(
+    JSON.parse(json).playerName
+  )} Territory`;
+  playerWrapper.appendChild(playerBoardTitle);
   playerBoard = document.createElement("div");
   playerBoard.className = "board";
   playerWrapper.appendChild(playerBoard);
 
-  content.appendChild(message);
-  content.appendChild(enemyWrapper);
-  content.appendChild(playerWrapper);
+  playArea.appendChild(enemyWrapper);
+  playArea.appendChild(playerWrapper);
 
   createBoards(json);
 }
@@ -128,6 +133,15 @@ function updatePlayerBoard(json) {
     }
   }
 }
+
+function updatePlayerName(name) {
+  turn.textContent = `${getPossessive(name)} Turn`;
+  playerBoardTitle.textContent = `${getPossessive(name)} Territory`;
+}
+
+// function setTurn(string) {
+//   turn.textContent = string;
+// }
 
 function setMessage(string) {
   message.textContent = string;
@@ -224,6 +238,10 @@ function bindPlayAgain(handler) {
   buttons.forEach((button) => button.addEventListener("click", handler));
 }
 
+function getPossessive(name) {
+  return name === "You" ? "Your" : `${name}'s`;
+}
+
 export {
   render,
   bindClickCell,
@@ -233,6 +251,7 @@ export {
   updatePlayerBoard,
   showEndResult,
   setMessage,
+  updatePlayerName,
   highlightCell,
   showEndTurnButton,
   hideEndTurnButton,
