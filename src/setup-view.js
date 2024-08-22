@@ -1,4 +1,7 @@
+import Pencil from "./images/pencil.svg";
+
 let content;
+let name;
 let message;
 let board;
 let dock;
@@ -8,7 +11,7 @@ const placedShips = [];
 let draggedShip = null;
 let offsetX, offsetY;
 
-function render() {
+function render(playerName = "You") {
   content = document.querySelector("#content");
   content.textContent = "";
 
@@ -20,13 +23,38 @@ function render() {
   instruction.className = "instruction";
   setupWrapper.appendChild(instruction);
 
-  const title = document.createElement("h2");
-  title.textContent = "Player Setup";
+  name = document.createElement("input");
+  name.setAttribute("type", "text");
+  name.value = playerName;
+  name.id = "player-name";
+  name.maxLength = 10;
+  name.addEventListener("blur", () => {
+    if (name.value === "") {
+      name.value = playerName;
+    }
+  });
+
+  const editButton = document.createElement("button");
+  const editIcon = new Image();
+  editButton.id = "edit-button";
+  editButton.ariaLabel = "edit button";
+  editIcon.src = Pencil;
+  editButton.appendChild(editIcon);
+  editButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    name.focus();
+  });
+
+  const nameForm = document.createElement("form");
+  nameForm.classList.add("name-form");
+  nameForm.appendChild(name);
+  nameForm.appendChild(editButton);
+  instruction.appendChild(nameForm);
+
   message = document.createElement("div");
   message.className = "message setup";
   message.innerHTML =
     "Drag and drop your ships onto the map.<br>Click to rotate.";
-  instruction.appendChild(title);
   instruction.appendChild(message);
 
   const playArea = document.createElement("div");
@@ -40,6 +68,8 @@ function render() {
 
   playArea.appendChild(board);
   playArea.appendChild(dock);
+
+  placedShips.splice(0, placedShips.length);
 
   createBoard();
   createShips();
@@ -208,4 +238,20 @@ function allShipsPlaced() {
   return placedShips.length === 5;
 }
 
-export { render };
+function bindClickFinishSetup(handler) {
+  finishSetupButton.addEventListener("click", () =>
+    handler(
+      placedShips.map((ship) => ({
+        x: Number(ship.dataset.x),
+        y: Number(ship.dataset.y),
+        length: Number(ship.dataset.length),
+        direction: ship.classList.contains("vertical")
+          ? "vertical"
+          : "horizontal",
+      })),
+      name.value
+    )
+  );
+}
+
+export { render, bindClickFinishSetup };

@@ -60,7 +60,7 @@ h1, h2, h3 {
     width: fit-content;
     margin: auto;
     display: flex;
-    gap: var(--gutter);
+    column-gap: var(--gutter);
 }
 
 .message {
@@ -128,6 +128,7 @@ h1, h2, h3 {
     filter: brightness(1.4);
 }
 
+.ship-wrapper .ship::after,
 .cell.ship::after {
   content: "";
   position: absolute;
@@ -138,6 +139,7 @@ h1, h2, h3 {
     background-color: black;
 }
 
+.ship-wrapper .ship.horizontal:after,
 .cell.ship.horizontal:after {
   left: -2px;
   right: -2px;
@@ -145,22 +147,27 @@ h1, h2, h3 {
   bottom: 10%;
 }
 
+.ship-wrapper .ship.horizontal.fore:after,
 .cell.ship.horizontal.fore:after{
   left: 0;
   border-radius: 100% 0% 0% 100% / 50% 50% 50% 50%; 
 }
 
+
+.ship-wrapper .ship.horizontal.aft:after,
 .cell.ship.horizontal.aft:after {
     right: 0;
     border-radius: 0% 100% 100% 0% / 50% 50% 50% 50%; 
 }
 
+.ship-wrapper .ship.horizontal.all:after,
 .cell.ship.horizontal.all:after {
     left: 0;
     right: 0;
     border-radius: 20% 20% 20% 20%/ 50% 50% 50% 50%;
 }
 
+.ship-wrapper .ship.vertical:after,
 .cell.ship.vertical:after{
   left: 10%;
   right: 10%;
@@ -168,16 +175,19 @@ h1, h2, h3 {
   bottom: -2px;
 }
 
+.ship-wrapper .ship.vertical.fore:after,
 .cell.ship.vertical.fore:after{
     top: 0;
   border-radius: 50% 50% 100% 0% / 100% 100% 0% 0%; 
 }
 
+.ship-wrapper .ship.vertical.aft:after,
 .cell.ship.vertical.aft:after{
     bottom: 0;
     border-radius: 100% 0% 50% 50% / 0% 0% 100% 100%; 
 }
 
+.ship-wrapper .ship.vertical.all:after,
 .cell.ship.vertical.all:after{
     top: 0;
     bottom: 0;
@@ -271,4 +281,60 @@ footer {
     display: flex;
     justify-content: center;
     gap: var(--gutter);
+}
+
+
+.dock {
+    width: 300px;
+    height: 448px;
+    border: 1px dotted gray;
+    align-self: end;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.ship-wrapper {
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+    gap: 2px;
+    flex-wrap: nowrap;
+}
+
+.ship-wrapper.horizontal {
+    flex-direction: row;
+}
+
+.ship-wrapper.vertical {
+    flex-direction: column;
+}
+
+.ship-wrapper .ship {
+    position: relative;
+}
+
+.board .ship-wrapper {
+    position: absolute;
+}
+
+.setup-wrapper {
+    display: grid;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.instruction{
+    width: 750px;
+}
+
+.setup.message {
+    height: fit-content;
+    margin-bottom: 0;
+}
+
+.finish-setup {
+    font-size: 1rem;
+    padding: 0 1rem;
+    margin: 0.5rem;
 }
