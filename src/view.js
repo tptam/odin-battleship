@@ -10,7 +10,11 @@ let playerBoardTitle;
 let playerBoard;
 let endTurnButton;
 
+let playerName;
+
 function render(json) {
+  playerName = JSON.parse(json).playerName;
+
   content = document.querySelector("#content");
   content.textContent = "";
   const playArea = document.createElement("div");
@@ -18,7 +22,7 @@ function render(json) {
   content.appendChild(playArea);
   turn = document.createElement("h2");
   turn.className = "turn";
-  turn.textContent = `${getPossessive(JSON.parse(json).playerName)} Turn`;
+  turn.textContent = `${getPossessive(playerName)} Turn`;
   message = document.createElement("div");
   message.className = "message";
   message.textContent = JSON.parse(json).message;
@@ -32,9 +36,7 @@ function render(json) {
   const playerWrapper = document.createElement("div");
   playerWrapper.className = "player-wrapper";
   playerBoardTitle = document.createElement("h2");
-  playerBoardTitle.textContent = `${getPossessive(
-    JSON.parse(json).playerName
-  )} Territory`;
+  playerBoardTitle.textContent = `${getPossessive(playerName)} Territory`;
   playerWrapper.appendChild(playerBoardTitle);
   playerBoard = document.createElement("div");
   playerBoard.className = "board";
@@ -139,10 +141,6 @@ function updatePlayerName(name) {
   playerBoardTitle.textContent = `${getPossessive(name)} Territory`;
 }
 
-// function setTurn(string) {
-//   turn.textContent = string;
-// }
-
 function setMessage(string) {
   message.textContent = string;
 }
@@ -218,7 +216,7 @@ function showEndResult(name, type) {
   const quitButton = document.createElement("button");
   const playAgainButton = document.createElement("button");
   img.src = type === "computer" ? Lose : Win;
-  message.textContent = type === "computer" ? "Computer Wins" : "You Win";
+  message.textContent = `${name} Win${name === "You" ? "" : "s"}`;
   playAgainButton.classList.add("play-again");
   playAgainButton.textContent = "Play Again";
   quitButton.textContent = "Quit";
