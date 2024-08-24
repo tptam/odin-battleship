@@ -1,4 +1,4 @@
-import { startGame } from "./manager.js";
+import { init } from "./manager.js";
 import "./style.css";
 
-startGame();
+init();
