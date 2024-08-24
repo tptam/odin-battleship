@@ -1,17 +1,26 @@
 import { Player } from "../src/player.js";
 import * as View from "./view.js";
+import { render as renderSetup, bindClickFinishSetup } from "./setup-view.js";
 
 let currentPlayer;
 let currentEnemy;
 
-function startGame() {
-  currentPlayer = Player("real");
-  currentEnemy = Player("computer");
+function init(player1 = "You", player2 = "Computer") {
+  currentPlayer = Player("real", player1);
+  currentEnemy = Player("computer", player2);
 
   currentPlayer.shipsMap = [...Array(10)].map(() => Array(10).fill(null));
   currentEnemy.shipsMap = [...Array(10)].map(() => Array(10).fill(null));
-  placeRandomShips(currentPlayer);
+
+  //Player setup
+  renderSetup(currentPlayer.name);
+  bindClickFinishSetup(onFinishSetup);
+
+  //Computer setup
   placeRandomShips(currentEnemy);
+}
+
+function startGame() {
   currentPlayer.gameBoard.pubsub.subscribe("receive_attack", (data) => {
     console.log("received attack - player");
     onReceiveAttack(data);
@@ -25,7 +34,7 @@ function startGame() {
     JSON.stringify({
       player: playerData,
       enemy: enemyData,
-      playerName: "You",
+      playerName: currentPlayer.name,
       message: "",
     })
   );
@@ -47,7 +56,7 @@ function onReceiveAttack(coord) {
     enemyData.clickable = false;
     View.updateEnemyBoard(JSON.stringify({ enemy: enemyData }));
     View.showPlayAgainButton();
-    View.showEndResult("", currentPlayer.type);
+    View.showEndResult(currentPlayer.name, currentPlayer.type);
     View.bindPlayAgain(onPlayAgain);
     return;
   }
@@ -56,7 +65,8 @@ function onReceiveAttack(coord) {
 }
 
 function onPlayAgain() {
-  startGame();
+  const player1 = isComputerTurn() ? currentEnemy.name : currentPlayer.name;
+  init(player1, "Computer");
 }
 
 function onEndTurn() {
@@ -66,7 +76,7 @@ function onEndTurn() {
   View.updateEnemyBoard(JSON.stringify({ enemy: enemyData }));
   View.updatePlayerBoard(JSON.stringify({ player: playerData }));
   View.hideEndTurnButton();
-  View.updatePlayerName(isComputerTurn() ? "Computer" : "You");
+  View.updatePlayerName(currentPlayer.name);
   View.setMessage("");
   if (isComputerTurn()) {
     playComputer();
@@ -182,4 +192,23 @@ function addShipToMap(x, y, length, direction, shipsMap) {
   }
 }
 
-export { startGame };
+function onFinishSetup(ships, playerName) {
+  console.log(ships);
+  if (playerName === "") {
+    alert("No player name is submitted.");
+    return;
+  } else {
+    currentPlayer.name = playerName;
+  }
+  const board = currentPlayer.gameBoard;
+  const shipsMap = currentPlayer.shipsMap;
+  ships.forEach(({ x, y, length, direction }) => {
+    if (board.isPlaceable(x, y, length, direction)) {
+      board.placeShip(x, y, length, direction);
+      addShipToMap(x, y, length, direction, shipsMap);
+    }
+  });
+  startGame();
+}
+
+export { init, startGame };
